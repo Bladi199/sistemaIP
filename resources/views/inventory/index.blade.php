@@ -13,46 +13,36 @@
             <p class="text-sm text-slate-500 font-medium italic">Control de existencias y flujo de materiales en tiempo real.</p>
         </div>
     </div>
+{{-- BARRA DE HERRAMIENTAS --}}
+<form action="{{ route('inventory.index') }}" method="GET" id="filterForm" class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+    
+    {{-- Input oculto para mantener el filtro de los botones al buscar --}}
+    <input type="hidden" name="filter" id="filterInput" value="{{ request('filter') }}">
 
-    {{-- BARRA DE HERRAMIENTAS NIVELADA --}}
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-        
-        {{-- Filtros de Estado (Botones) --}}
-        <div class="flex items-center gap-2">
-            <button class="px-4 py-2.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-md transition-all active:scale-95">
-                Todos
-            </button>
-            <button class="px-4 py-2.5 bg-slate-50 text-slate-500 border border-gray-100 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-100 transition-all">
-                Nivel Crítico
-            </button>
-            <button class="px-4 py-2.5 bg-slate-50 text-slate-500 border border-gray-100 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-100 transition-all">
-                Stock Alto
-            </button>
-        </div>
-
-        {{-- Grupo de Búsqueda y Selección --}}
-        <div class="flex flex-col sm:flex-row items-center gap-3 flex-1 lg:justify-end">
-            
-            {{-- Selector de Productos Específicos --}}
-            <div class="relative w-full sm:w-64">
-                <select class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-[11px] font-bold uppercase tracking-tight text-slate-700 appearance-none focus:ring-2 focus:ring-[#00A59A]/20 focus:border-[#00A59A] transition-all cursor-pointer">
-                    <option value="">Filtrar por Producto...</option>
-                    @foreach($products as $p)
-                        <option value="{{ $p->id }}">{{ $p->name }}</option>
-                    @endforeach
-                </select>
-                <span class="absolute right-3 top-3 text-slate-400 pointer-events-none text-xs">▼</span>
-            </div>
-
-            {{-- Buscador de Texto --}}
-            <div class="relative w-full sm:w-80 group">
-                <span class="absolute left-4 top-3 text-slate-400 transition-colors group-focus-within:text-[#00A59A]">🔍</span>
-                <input type="text" 
-                       placeholder="BUSCAR POR CÓDIGO O CATEGORÍA..." 
-                       class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-[11px] font-bold uppercase tracking-widest text-slate-700 placeholder:text-slate-300 focus:ring-2 focus:ring-[#00A59A]/20 focus:border-[#00A59A] transition-all outline-none">
-            </div>
-        </div>
+    {{-- Filtros de Estado --}}
+    <div class="flex items-center gap-2">
+        <button type="button" onclick="applyFilter('')" 
+            class="px-4 py-2.5 {{ !request('filter') ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500' }} text-[10px] font-black uppercase tracking-widest rounded-xl transition-all">
+            Todos
+        </button>
+        <button type="button" onclick="applyFilter('critico')" 
+            class="px-4 py-2.5 {{ request('filter') == 'critico' ? 'bg-rose-600 text-white' : 'bg-slate-50 text-slate-500' }} border border-gray-100 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all">
+            Nivel Crítico
+        </button>
+        <button type="button" onclick="applyFilter('alto')" 
+            class="px-4 py-2.5 {{ request('filter') == 'alto' ? 'bg-[#00A59A] text-white' : 'bg-slate-50 text-slate-500' }} border border-gray-100 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all">
+            Stock Alto
+        </button>
     </div>
+
+    {{-- Buscador --}}
+    <div class="relative w-full sm:w-80 group">
+        <span class="absolute left-4 top-3 text-slate-400">🔍</span>
+        <input type="text" name="search" value="{{ request('search') }}"
+               placeholder="BUSCAR POR CÓDIGO O CATEGORÍA..." 
+               class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-[11px] font-bold uppercase tracking-widest text-slate-700 outline-none">
+    </div>
+</form>
 
     {{-- Tabla de Inventario --}}
     <div class="bg-white shadow-sm rounded-3xl border border-gray-100 overflow-hidden">
@@ -131,7 +121,13 @@
 @include('inventory.partials.entry-modal')
 @include('inventory.partials.exit-modal')
 @endsection
-
+<script>
+// Función para cambiar el filtro sin borrar lo que hay en el buscador
+function applyFilter(filterValue) {
+    document.getElementById('filterInput').value = filterValue;
+    document.getElementById('filterForm').submit();
+}
+</script>
 
 <script>
 function openEntryModal(id, name) {
@@ -157,16 +153,23 @@ function closeExitModal() {
 @if(request('openEntry'))
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        openEntryModal(
-            {{ request('openEntry') }},
-            "{{ $products->firstWhere('id', request('openEntry'))->name ?? '' }}"
-        );
+        // Buscamos el producto en la colección cargada en la vista
+        @php
+            $pTarget = $products->firstWhere('id', request('openEntry'));
+        @endphp
+
+        @if($pTarget)
+            openEntryModal(
+                {{ $pTarget->id }},
+                "{{ $pTarget->name }}"
+            );
+        @endif
+        
+        // Limpiar la URL para que si el usuario recarga no se abra el modal solo
+        if (window.location.search.includes('openEntry')) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     });
-    document.addEventListener("DOMContentLoaded", function() {
-    if (window.location.search.includes('openEntry')) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-});
 </script>
 @endif
 

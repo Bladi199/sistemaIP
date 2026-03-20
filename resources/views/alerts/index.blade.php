@@ -75,8 +75,10 @@
                     
                     <div class="text-right">
                         <span class="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-tighter">Hace {{ $alert->created_at->diffForHumans(null, true) }}</span>
-                        <a href="{{ route('products.edit', $alert->product->id) }}" 
-                           class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-black transition-all">
+                        
+                        {{-- CAMBIO AQUÍ: Enviamos a inventory.index con el parámetro openEntry --}}
+                        <a href="{{ route('inventory.index', ['openEntry' => $alert->product->id]) }}" 
+                        class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[#00A59A] transition-all shadow-md active:scale-95">
                             Gestionar
                         </a>
                     </div>

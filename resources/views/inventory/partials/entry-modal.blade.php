@@ -58,7 +58,7 @@
                 </button>
                 <button type="submit" 
                         class="flex-1 px-4 py-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#00A59A] shadow-lg shadow-slate-200 transition-all">
-                    Registrar Entrada
+                    Registrar Entradaaaaa
                 </button>
             </div>
         </form>

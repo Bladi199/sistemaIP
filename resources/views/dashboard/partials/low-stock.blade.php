@@ -29,8 +29,13 @@
                         </span>
                     </td>
                     <td class="px-6 py-5 text-center">
-                        <a href="{{ route('products.edit', $product) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-black hover:border-black transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        {{-- Cambiamos la ruta a inventory.index y pasamos el parámetro openEntry con el ID del producto --}}
+                        <a href="{{ route('inventory.index', ['openEntry' => $product->id]) }}" 
+                        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-[#00A59A] hover:border-[#00A59A] transition-all shadow-sm active:scale-90"
+                        title="Registrar Entrada">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
                         </a>
                     </td>
                 </tr>

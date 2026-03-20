@@ -29,7 +29,7 @@
     <label>Observación</label>
     <textarea name="notes"></textarea>
 
-    <button type="submit">Registrar Entrada</button>
+    <button type="submit">Registrar Entradaaaaa</button>
 </form>
 
 

@@ -11,15 +11,40 @@ use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller
 {
-    public function index()
-    {
-        $products = Product::with(['category', 'warehouse'])->get();
+    public function index(Request $request)
+{
+    // Iniciamos la consulta con las relaciones
+    $query = Product::with(['category', 'warehouse']);
 
-        $entryReasons = MovementReason::where('affects_stock', 'suma')->get();
-        $exitReasons  = MovementReason::where('affects_stock', 'resta')->get();
-
-        return view('inventory.index', compact('products', 'entryReasons', 'exitReasons'));
+    // 1. Aplicar Jerarquía de Estado (Los Botones)
+    if ($request->filled('filter')) {
+        if ($request->filter == 'critico') {
+            $query->whereRaw('stock_actual <= stock_minimo');
+        } elseif ($request->filter == 'alto') {
+            // Ejemplo: mayor al 90% del máximo
+            $query->whereRaw('stock_actual >= (stock_maximo * 0.9)');
+        }
     }
+
+    // 2. Aplicar Búsqueda sobre el resultado anterior (El Input)
+    if ($request->filled('search')) {
+        $search = $request->search;
+        // Usamos un sub-where para no romper la lógica del filtro de estado
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%")
+              ->orWhereHas('category', function($cat) use ($search) {
+                  $cat->where('name', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
+    $products = $query->get();
+
+    $entryReasons = MovementReason::where('affects_stock', 'suma')->get();
+    $exitReasons  = MovementReason::where('affects_stock', 'resta')->get();
+
+    return view('inventory.index', compact('products', 'entryReasons', 'exitReasons'));
+}
 
     // =========================
     // Registrar Entrada (Ingreso)
