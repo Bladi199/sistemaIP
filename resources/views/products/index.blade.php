@@ -22,14 +22,22 @@
         </a>
     </div>
 
+    
+
     {{-- Filtros y Búsqueda --}}
-    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm mb-6 flex gap-4">
-        <div class="relative flex-1">
-            <span class="absolute left-4 top-3 text-slate-400">🔍</span>
-            <input type="text" placeholder="Buscar por nombre o código..."
-                   class="w-full pl-11 pr-4 py-2.5 rounded-xl border-gray-100 bg-slate-50 focus:bg-white focus:border-[#3B82F6] transition-all text-sm font-medium">
-        </div>
+<form action="{{ route('products.index') }}" method="GET" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm mb-6 flex gap-4">
+    <div class="relative flex-1">
+        <span class="absolute left-4 top-3 text-slate-400">🔍</span>
+        <input type="text" 
+               name="search" 
+               value="{{ request('search') }}"
+               placeholder="Buscar por nombre o código..."
+               class="w-full pl-11 pr-4 py-2.5 rounded-xl border-gray-100 bg-slate-50 focus:bg-white focus:border-[#3B82F6] transition-all text-sm font-medium outline-none">
     </div>
+    {{-- Botón invisible para permitir el envío con la tecla Enter --}}
+    <button type="submit" class="hidden"></button>
+</form>
+
 
     {{-- Tabla Premium --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

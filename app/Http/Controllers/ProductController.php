@@ -10,14 +10,27 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        $products = Product::with(['category', 'warehouse'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+    
+    public function index(Request $request)
+{
+    $query = Product::with(['category', 'warehouse']);
 
-        return view('products.index', compact('products'));
+    // Filtro por Input de Texto
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%")
+              ->orWhere('code', 'LIKE', "%{$search}%")
+              ->orWhereHas('category', function($cat) use ($search) {
+                  $cat->where('name', 'LIKE', "%{$search}%");
+              });
+        });
     }
+
+    $products = $query->orderBy('created_at', 'desc')->get();
+
+    return view('products.index', compact('products'));
+}
 
     public function create()
     {
