@@ -39,7 +39,7 @@
 
     <div class="group">
         <label for="email" class="block text-[11px] font-black text-black uppercase tracking-widest mb-2 ml-1 group-focus-within:text-[#00A59A] transition-colors">
-            Correo Institucional
+            Correo 
         </label>
         <div class="relative">
             <input id="email" type="email" name="email" :value="old('email')" required autofocus 
@@ -57,11 +57,11 @@
             <label for="password" class="text-[11px] font-black text-black uppercase tracking-widest group-focus-within:text-[#00A59A] transition-colors">
                 Contraseña
             </label>
-            <!--@if (Route::has('password.request'))
+            @if (Route::has('password.request'))
                 <a href="{{ route('password.request') }}" class="text-[10px] font-black text-[#00A59A] uppercase tracking-tighter hover:text-black transition-colors">
-                    ¿Olvidó su clave?
+                    ¿Olvidó su contraseña?
                 </a>
-            @endif-->
+            @endif
         </div>
         <div class="relative">
             <input id="password" :type="show ? 'text' : 'password'" name="password" required autocomplete="current-password"

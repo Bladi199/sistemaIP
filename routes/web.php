@@ -46,16 +46,16 @@ Route::middleware('auth')->group(function () {
 
 
    // INVENTARIO
-Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 
-// ENTRADA (POST)
-Route::post('/inventory/entry', [InventoryController::class, 'storeEntry'])->name('inventory.entry.store');
+    // ENTRADA (POST)
+    Route::post('/inventory/entry', [InventoryController::class, 'storeEntry'])->name('inventory.entry.store');
 
-// SALIDA (POST)
-Route::post('/inventory/exit', [InventoryController::class, 'storeExit'])->name('inventory.exit.store');
+    // SALIDA (POST)
+    Route::post('/inventory/exit', [InventoryController::class, 'storeExit'])->name('inventory.exit.store');
 
-// Inventario AJAX
-Route::post('/inventory/movement', [InventoryController::class, 'storeMovement'])
+    // Inventario AJAX
+    Route::post('/inventory/movement', [InventoryController::class, 'storeMovement'])
     ->name('inventory.movement.store');
     Route::get('/alerts', [AlertController::class, 'index'])->name('alerts.index');
 
