@@ -60,7 +60,7 @@ class InventoryController extends Controller
 
         $product = Product::findOrFail($request->product_id);
 
-        // 🔴 AQUÍ ESTABA EL ERROR
+        // 🔴 AQUÍ ESTABA EL ERROR-------------------------------------------------ññññññññññññññññññññññññññ
         $movementType = MovementType::where('name', 'Entrada')->firstOrFail();
 
         Movement::create([

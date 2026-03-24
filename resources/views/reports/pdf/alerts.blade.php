@@ -2,54 +2,123 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Reporte de Alertas</title>
     <style>
-        body { font-family: Arial; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #000; padding: 5px; }
-        th { background: #eee; }
-        .title { text-align: center; font-size: 16px; margin-bottom: 10px; }
+        /* Tipografía limpia y jerarquía visual */
+        body { 
+            font-family: 'Helvetica', 'Arial', sans-serif; 
+            color: #1a1a1a; 
+            line-height: 1.5;
+            margin: 20px;
+        }
+
+        /* Encabezado Estilo Corporativo */
+        .header-table { width: 100%; border: none; margin-bottom: 30px; }
+        .logo-text { 
+            font-size: 22px; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+        .brand-accent { color: #00A59A; } /* El turquesa de tu logo */
+        
+        .report-info { text-align: right; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Título de Sección */
+        .section-title {
+            border-left: 4px solid #1a1a1a;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+        .section-title h1 { font-size: 14px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Tabla Estilizada (Sin bordes toscos) */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        
+        th { 
+            background-color: #f8fafc; 
+            color: #000; 
+            font-size: 9px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 2px solid #1a1a1a; /* Línea gruesa premium */
+        }
+
+        td { 
+            padding: 10px 8px; 
+            font-size: 10px; 
+            border-bottom: 1px solid #eee; 
+            vertical-align: top;
+        }
+
+        /* Badges de Severidad */
+        .severity { font-weight: bold; text-transform: uppercase; font-size: 8px; }
+        .high { color: #dc2626; }
+
+        .footer { 
+            position: fixed; bottom: 0; width: 100%; 
+            text-align: center; font-size: 9px; color: #999; 
+            border-top: 1px solid #eee; padding-top: 10px;
+        }
     </style>
 </head>
-
 <body>
 
-<div class="title">
-    REPORTE DE ALERTAS<br>
-    Generado: {{ $date->format('d/m/Y H:i') }}
-</div>
+    <table class="header-table">
+        <tr>
+            <td style="border:none; padding:0;">
+                <div class="logo-text">PRETEN<span class="brand-accent">FORT</span></div>
+                <div style="font-size: 8px; color: #666; margin-top: -5px;">VIGUETAS DE ALTA RESISTENCIA</div>
+            </td>
+            <td class="report-info" style="border:none;">
+                REPORTE DE SEGURIDAD<br>
+                FECHA: {{ $date->format('d/m/Y') }}<br>
+                HORA: {{ $date->format('H:i') }}
+            </td>
+        </tr>
+    </table>
 
-<table>
-<thead>
-<tr>
-    <th>Fecha</th>
-    <th>Producto</th>
-    <th>Tipo</th>
-    <th>Severidad</th>
-    <th>Mensaje</th>
-    <th>Estado</th>
-    <th>Acciones</th>
-</tr>
-</thead>
+    <div class="section-title">
+        <h1>Control de Alertas de Inventario</h1>
+    </div>
 
-<tbody>
-@foreach($alerts as $a)
-<tr>
-    <td>{{ $a->created_at->format('d/m/Y') }}</td>
-    <td>{{ $a->product->name ?? '-' }}</td>
-    <td>{{ $a->type }}</td>
-    <td>{{ $a->severity }}</td>
-    <td>{{ $a->message }}</td>
-    <td>{{ $a->status }}</td>
-    <td>
-        @foreach($a->actions as $ac)
-            - {{ $ac->action }} por {{ $ac->user->name ?? '' }}<br>
-        @endforeach
-    </td>
-</tr>
-@endforeach
-</tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Severidad</th>
+                <th>Mensaje</th>
+                <th>Estado</th>
+                <th>Acciones Registradas</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($alerts as $a)
+            <tr>
+                <td style="white-space: nowrap;">{{ $a->created_at->format('d/m/Y') }}</td>
+                <td style="font-weight: bold;">{{ $a->product->name ?? 'N/A' }}</td>
+                <td>
+                    <span class="severity {{ strtolower($a->severity) == 'alta' ? 'high' : '' }}">
+                        {{ $a->severity }}
+                    </span>
+                </td>
+                <td style="color: #444;">{{ $a->message }}</td>
+                <td>{{ $a->status }}</td>
+                <td style="font-size: 8px; color: #666;">
+                    @foreach($a->actions as $ac)
+                        • {{ $ac->action }} ({{ $ac->user->name ?? 'Sistema' }})<br>
+                    @endforeach
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Documento generado automáticamente por el Sistema de Control de Inventario PRETENFORT
+    </div>
 
 </body>
 </html>

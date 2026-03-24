@@ -28,21 +28,41 @@
         </div>
 
         {{-- Lado Derecho: Acciones --}}
-        <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-            <div class="text-right hidden lg:block mr-4">
-                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Base de cálculo</p>
-                <p class="text-[10px] font-bold text-slate-500">Costo unitario actual</p>
-            </div>
-            
-            <button class="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-black transition-all active:scale-95 shadow-xl shadow-slate-200">
-                Generar Reporte
-            </button>
-            
-            <button class="w-full sm:w-auto p-4 bg-white border border-slate-100 text-slate-400 hover:text-emerald-500 hover:border-emerald-100 rounded-2xl transition-all shadow-sm">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                </svg>
-            </button>
-        </div>
+        {{-- Lado Derecho: Acciones --}}
+<div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+    <div class="text-right hidden lg:block mr-4">
+        <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Base de cálculo</p>
+        <p class="text-[10px] font-bold text-slate-500">Costo unitario actual</p>
+    </div>
+    
+    {{-- Formulario oculto que imita la configuración de Reportes --}}
+    <form action="{{ route('reports.generate') }}" method="POST" class="w-full sm:w-auto">
+        @csrf
+        {{-- Forzamos los valores para que sea un reporte de Valorización --}}
+        <input type="hidden" name="type" value="valuation">
+        <input type="hidden" name="period" value="month"> {{-- O el que prefieras por defecto --}}
+        <input type="hidden" name="format" value="pdf">
+
+        <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-black transition-all active:scale-95 shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
+            <svg class="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v12m0 0l-3-3m3 3l3-3"></path>
+            </svg>
+            Generar Reporte
+        </button>
+    </form>
+    
+    {{-- Botón de descarga rápida (opcional, puede apuntar a Excel directo) --}}
+    <form action="{{ route('reports.generate') }}" method="POST">
+        @csrf
+        <input type="hidden" name="type" value="valuation">
+        <input type="hidden" name="period" value="month">
+        <input type="hidden" name="format" value="excel">
+        <button type="submit" class="w-full sm:w-auto p-4 bg-white border border-slate-100 text-slate-400 hover:text-emerald-500 hover:border-emerald-100 rounded-2xl transition-all shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+        </button>
+    </form>
+</div>
     </div>
 </div>
