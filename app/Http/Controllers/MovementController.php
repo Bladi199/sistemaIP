@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Enums\MovementTypeEnum;
 use App\Models\Movement;
 use Illuminate\Http\Request;
 
@@ -21,10 +21,16 @@ class MovementController extends Controller
 
     // Filtro por tipo
     if ($type) {
-        $query->whereHas('movementType', function ($q) use ($type) {
-            $q->where('name', ucfirst($type));
-        });
+    $typeEnum = match ($type) {
+        'entrada' => MovementTypeEnum::ENTRADA,
+        'salida'  => MovementTypeEnum::SALIDA,
+        default   => null,
+    };
+
+    if ($typeEnum) {
+        $query->where('movement_type_id', $typeEnum->value);
     }
+}
 
     // Filtro por período
     $query->where('created_at', '>=', now()->subDays($period));
@@ -33,12 +39,12 @@ class MovementController extends Controller
 
     // Totales independientes (mejor práctica)
     $totalEntradas = (clone $query)
-        ->whereHas('movementType', fn($q) => $q->where('name', 'Entrada'))
-        ->sum('quantity');
+    ->where('movement_type_id', MovementTypeEnum::ENTRADA->value)
+    ->sum('quantity');
 
-    $totalSalidas = (clone $query)
-        ->whereHas('movementType', fn($q) => $q->where('name', 'Salida'))
-        ->sum('quantity');
+$totalSalidas = (clone $query)
+    ->where('movement_type_id', MovementTypeEnum::SALIDA->value)
+    ->sum('quantity');
 
     return view('movements.index', compact(
         'movements',

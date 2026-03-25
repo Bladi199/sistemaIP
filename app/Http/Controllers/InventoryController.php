@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Enums\MovementTypeEnum;
 use App\Models\Product;
 use App\Models\Movement;
 use App\Models\MovementType;
@@ -61,12 +61,12 @@ class InventoryController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         // 🔴 AQUÍ ESTABA EL ERROR-------------------------------------------------ññññññññññññññññññññññññññ
-        $movementType = MovementType::where('name', 'Entrada')->firstOrFail();
+        $movementTypeId = MovementTypeEnum::ENTRADA->value;
 
         Movement::create([
             'product_id' => $product->id,
             'user_id' => Auth::id(),
-            'movement_type_id' => $movementType->id,
+            'movement_type_id' => $movementTypeId,
             'movement_reason_id' => $request->movement_reason_id,
             'quantity' => $request->quantity,
             'notes' => $request->notes,
@@ -94,15 +94,12 @@ class InventoryController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         // 🔑 MAPEO CORRECTO
-        $typeMap = [
-            'entrada' => 'Ingreso',
-            'salida'  => 'Salida',
-        ];
+        $movementTypeEnum = match ($request->movement_type) {
+            'entrada' => MovementTypeEnum::ENTRADA,
+            'salida'  => MovementTypeEnum::SALIDA,
+        };
 
-        $movementType = MovementType::where(
-            'name',
-            $typeMap[$request->movement_type]
-        )->firstOrFail();
+        $movementTypeId = $movementTypeEnum->value;
 
         if (
             $request->movement_type === 'salida' &&
@@ -114,7 +111,7 @@ class InventoryController extends Controller
         Movement::create([
             'product_id' => $product->id,
             'user_id' => Auth::id(),
-            'movement_type_id' => $movementType->id,
+            'movement_type_id' => $movementTypeId,
             'movement_reason_id' => $request->movement_reason_id,
             'quantity' => $request->quantity,
             'notes' => $request->notes,
@@ -143,7 +140,7 @@ class InventoryController extends Controller
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        $movementType = MovementType::where('name', 'Salida')->firstOrFail();
+       $movementTypeId = MovementTypeEnum::SALIDA->value;
 
         if ($product->stock_actual < $request->quantity) {
             return back()->with('error', 'Stock insuficiente');
@@ -152,7 +149,7 @@ class InventoryController extends Controller
         Movement::create([
             'product_id' => $product->id,
             'user_id' => Auth::id(),
-            'movement_type_id' => $movementType->id,
+            'movement_type_id' => $movementTypeId,
             'movement_reason_id' => $request->movement_reason_id,
             'quantity' => $request->quantity,
             'notes' => $request->notes,
