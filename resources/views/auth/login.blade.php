@@ -43,7 +43,7 @@
         </label>
         <div class="relative">
             <input id="email" type="email" name="email" :value="old('email')" required autofocus 
-                class="w-full bg-white border-2 border-slate-200 rounded-2xl px-5 py-4 text-sm font-bold text-black outline-none focus:border-[#00A59A] transition-all placeholder:text-slate-300"
+                class="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 text-sm font-medium text-black outline-none focus:border-[#00A59A] transition-all placeholder:text-slate-300"
                 placeholder="usuario@pretenfort.com">
             <div class="absolute right-5 top-1/2 -translate-y-1/2 text-black">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" /></svg>
@@ -65,7 +65,7 @@
         </div>
         <div class="relative">
             <input id="password" :type="show ? 'text' : 'password'" name="password" required autocomplete="current-password"
-                class="w-full bg-white border-2 border-slate-200 rounded-2xl px-5 py-4 text-sm font-bold text-black outline-none focus:border-[#00A59A] transition-all placeholder:text-slate-300"
+                class="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 text-sm font-medium text-black outline-none focus:border-[#00A59A] transition-all placeholder:text-slate-300"
                 placeholder="••••••••">
             
             <button type="button" @click="show = !show" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-900 hover:text-[#00A59A] transition-colors focus:outline-none">

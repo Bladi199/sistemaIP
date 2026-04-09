@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-8 pb-12">
+<div class="max-w-7xl mx-auto px-4 py-8">
     {{-- Header del Dashboard --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         

@@ -7,27 +7,38 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-{
-    Schema::create('movements', function (Blueprint $table) {
-        $table->id();
+    {
+        Schema::create('movements', function (Blueprint $table) {
+            $table->id();
 
-        // FK
-        $table->foreignId('product_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->foreignId('movement_type_id')->constrained()->onDelete('cascade');
-        $table->foreignId('movement_reason_id')->constrained()->onDelete('cascade');
+            // FK
+            $table->foreignId('product_id')
+                  ->constrained()
+                  ->cascadeOnDelete(); // si se elimina producto, sí se elimina movimiento
 
-        // Datos del movimiento
-        $table->integer('quantity');
-        $table->string('notes')->nullable();
+            $table->foreignId('user_id')
+                  ->nullable() // 👈 IMPORTANTE
+                  ->constrained()
+                  ->nullOnDelete(); // 👈 SOLUCIÓN
 
-        $table->timestamps(); // creado y actualizado
-    });
-}
+            $table->foreignId('movement_type_id')
+                  ->constrained()
+                  ->restrictOnDelete(); // 👈 recomendado
 
-public function down(): void
-{
-    Schema::dropIfExists('movements');
-}
+            $table->foreignId('movement_reason_id')
+                  ->constrained()
+                  ->restrictOnDelete(); // 👈 recomendado
 
+            // Datos del movimiento
+            $table->integer('quantity');
+            $table->string('notes')->nullable();
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('movements');
+    }
 };

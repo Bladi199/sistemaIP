@@ -3,7 +3,7 @@
 @section('title', 'Reportes y Análisis')
 
 @section('content')
-<div class="space-y-8">
+<div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex items-center gap-3">
             <span class="w-2 h-8 bg-slate-900 rounded-full"></span>
             <div>

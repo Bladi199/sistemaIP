@@ -3,109 +3,157 @@
 <head>
     <meta charset="utf-8">
     <style>
+        @page { margin: 1.5cm; }
+
+        /* Tipografía */
         body { 
             font-family: 'Helvetica', 'Arial', sans-serif; 
             color: #1a1a1a; 
-            margin: 30px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
-        /* Encabezado */
-        .header { border-bottom: 3px solid #1a1a1a; padding-bottom: 10px; margin-bottom: 30px; }
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
-        .accent { color: #00A59A; }
-        .date { float: right; font-size: 10px; color: #666; margin-top: 10px; text-transform: uppercase; }
+        /* Header */
+        .header-table { width: 100%; border: none; margin-bottom: 25px; }
 
-        /* Grid de Resumen (Simulado para PDF) */
-        .summary-container { width: 100%; margin-bottom: 40px; }
-        .card { 
-            display: inline-block; 
-            width: 30%; 
-            background: #f8fafc; 
-            padding: 15px; 
-            border-radius: 10px; 
-            border: 1px solid #e2e8f0;
-            margin-right: 2%;
-        }
-        .card-label { 
-            display: block; 
-            font-size: 8px; 
+        .logo-text { 
+            font-size: 22px; 
             font-weight: 900; 
-            color: #64748b; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        .card-value { 
-            display: block; 
-            font-size: 16px; 
-            font-weight: 900; 
-            color: #1a1a1a; 
-        }
-
-        /* Tabla de Bajo Stock */
-        .section-header { 
-            background: #1a1a1a; 
-            color: white; 
-            padding: 8px 15px; 
-            border-radius: 5px;
-            font-size: 11px;
-            font-weight: 900;
+            letter-spacing: -1px; 
             text-transform: uppercase;
-            letter-spacing: 1px;
+        }
+
+        .brand-accent { color: #00A59A; }
+
+        .report-info { 
+            text-align: right; 
+            font-size: 10px; 
+            color: #666; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        /* Sección */
+        .section {
+            margin-top: 10px;
             margin-bottom: 15px;
         }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { 
-            text-align: left; 
-            font-size: 9px; 
-            text-transform: uppercase; 
-            color: #666; 
-            padding: 10px 5px;
-            border-bottom: 2px solid #eee;
+        .section h2 {
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 8px 0;
         }
-        td { 
-            padding: 12px 5px; 
-            font-size: 11px; 
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .stock-warning { color: #dc2626; font-weight: bold; }
 
+        /* Tabla */
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+
+        th { 
+            background-color: #f8fafc; 
+            color: #000; 
+            font-size: 9px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        td { 
+            padding: 10px 8px; 
+            font-size: 10px; 
+            border-bottom: 1px solid #eee; 
+        }
+
+        /* Resumen simple (reemplazo de cards) */
+        .summary {
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+            margin-right: 5px;
+        }
+
+        .summary-value {
+            font-weight: 900;
+            color: #000;
+        }
+
+        .stock-warning {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        /* Footer */
         .footer { 
-            position: fixed; bottom: 0; width: 100%; 
-            text-align: center; font-size: 9px; color: #999; 
-            padding-top: 10px; border-top: 1px solid #eee;
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            text-align: center; 
+            font-size: 9px; 
+            color: #999; 
+            border-top: 1px solid #eee; 
+            padding-top: 10px;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="header">
-        <span class="date">Generado: {{ $date->format('d/m/Y H:i') }}</span>
-        <div class="logo">PRETEN<span class="accent">FORT</span></div>
-        <div style="font-size: 9px; font-weight: bold; color: #666; letter-spacing: 2px;">REPORTE CONSOLIDADO MENSUAL</div>
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td style="border:none; padding:0;">
+                <div class="logo-text">PRETEN<span class="brand-accent">FORT</span></div>
+                <div style="font-size: 8px; color: #666; margin-top: -5px;">
+                    VIGUETAS DE ALTA RESISTENCIA
+                </div>
+            </td>
+            <td class="report-info" style="border:none;">
+                REPORTE CONSOLIDADO<br>
+                FECHA: {{ $date->format('d/m/Y') }}<br>
+                HORA: {{ $date->format('H:i') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- RESUMEN -->
+    <div class="section">
+        <h2>Resumen General</h2>
     </div>
 
-    <div class="summary-container">
-        <div class="card">
-            <span class="card-label">Total Valorizado</span>
-            <span class="card-value">$ {{ number_format($data['total_value'], 2) }}</span>
+    <div class="summary">
+        <div class="summary-row">
+            <span class="summary-label">Total Valorizado:</span>
+            <span class="summary-value">$ {{ number_format($data['total_value'], 2) }}</span>
         </div>
-        <div class="card">
-            <span class="card-label">Movimientos</span>
-            <span class="card-value">{{ $data['movements'] }}</span>
+
+        <div class="summary-row">
+            <span class="summary-label">Movimientos:</span>
+            <span class="summary-value">{{ $data['movements'] }}</span>
         </div>
-        <div class="card" style="margin-right: 0;">
-            <span class="card-label">Alertas</span>
-            <span class="card-value">{{ $data['alerts'] }}</span>
+
+        <div class="summary-row">
+            <span class="summary-label">Alertas:</span>
+            <span class="summary-value">{{ $data['alerts'] }}</span>
         </div>
     </div>
 
-    <div class="section-header">
-        ⚠️ Productos Bajo Stock Mínimo
+    <!-- SECCIÓN -->
+    <div class="section">
+        <h2>Productos Bajo Stock Mínimo</h2>
     </div>
 
+    <!-- TABLA -->
     <table>
         <thead>
             <tr>
@@ -118,15 +166,20 @@
             @foreach($data['low_stock'] as $p)
             <tr>
                 <td style="font-weight: bold;">{{ $p->name }}</td>
-                <td style="text-align: center;" class="stock-warning">{{ $p->stock_actual }}</td>
-                <td style="text-align: center; color: #64748b;">{{ $p->stock_minimo }}</td>
+                <td style="text-align: center;" class="stock-warning">
+                    {{ $p->stock_actual }}
+                </td>
+                <td style="text-align: center; color: #64748b;">
+                    {{ $p->stock_minimo }}
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
+    <!-- FOOTER -->
     <div class="footer">
-        Este documento es un resumen oficial del estado de inventario de PRETENFORT.
+        Documento generado automáticamente por el Sistema PRETENFORT
     </div>
 
 </body>

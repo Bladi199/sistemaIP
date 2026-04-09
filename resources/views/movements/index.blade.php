@@ -140,10 +140,14 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
                             <div class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-black text-slate-500">
-                                {{ substr($m->user->name, 0, 2) }}
-                            </div>
-                            <span class="text-xs font-bold text-slate-700">{{ $m->user->name }}</span>
-                        </div>
+                                
+                                {{ $m->user ? substr($m->user->name, 0, 2) : '--' }}
+                            </div><span class="text-xs font-bold text-slate-700">
+    {{ $m->user->name }}
+    @if($m->user->deleted_at)
+        <span class="text-red-400 text-[10px]">(eliminado)</span>
+    @endif
+</span></div>
                     </td>
                 </tr>
                 @empty

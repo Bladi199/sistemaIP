@@ -19,6 +19,7 @@ return new class extends Migration
         $table->string('email', 150)->unique();
         $table->string('password');
         $table->rememberToken();
+        $table->softDeletes();
 
         // Relaciones y estado
         $table->foreignId('role_id')->constrained('roles');

@@ -19,6 +19,11 @@ class RolesSeeder extends Seeder
                 'name' => 'usuario',
                 'description' => 'Usuario estándar'
             ]
+            ,
+            [
+                'name' => 'operador',
+                'description' => 'Encargado del inventario'
+            ]
         ]);
     }
 }

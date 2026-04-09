@@ -14,8 +14,8 @@
         </div>
 
         <a href="{{ route('users.create') }}"
-            class="inline-flex items-center justify-center px-6 py-3 bg-slate-900 text-white text-sm font-black uppercase tracking-widest rounded-xl hover:bg-black transition-all shadow-md">
-            <span>+ Agregar Nuevo Usuario</span>
+             class="px-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-all shadow-md flex items-center gap-2">
+           <span>+ Nuevo Usuario</span>
         </a>
     </div>
 

@@ -4,73 +4,126 @@
     <meta charset="utf-8">
     <style>
         @page { margin: 1.5cm; }
+
         body { 
             font-family: 'Helvetica', Arial, sans-serif; 
             color: #1a1a1a; 
-            margin: 0;
-            line-height: 1.2;
+            line-height: 1.4;
         }
 
-        /* Encabezado Maestro */
-        .header { 
-            border-bottom: 2px solid #000; 
-            padding-bottom: 15px; 
-            margin-bottom: 40px; 
+        /* HEADER UNIFORME */
+        .header-table { width: 100%; margin-bottom: 25px; }
+        .logo-text { 
+            font-size: 22px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: -1px; 
         }
-        .brand { font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
         .accent { color: #00A59A; }
-        .meta { float: right; text-align: right; font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Título del Documento */
-        h2 { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .subtitle { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; }
+        .header-detail { 
+            text-align: right; 
+            font-size: 10px; 
+            color: #666; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
 
-        /* Tabla de Alta Costura Financiera */
+        /* SECCIÓN */
+        .section {
+            padding-top: 12px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .section p {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        /* TABLA ESTÁNDAR */
         table { width: 100%; border-collapse: collapse; }
-        
+
         th { 
-            background-color: #000; 
-            color: #fff; 
-            font-size: 8px; 
+            background-color: #f8fafc; 
+            color: #000; 
+            font-size: 9px; 
             font-weight: bold; 
             text-transform: uppercase; 
-            letter-spacing: 1.5px;
-            padding: 12px 10px;
+            padding: 10px 8px;
+            border-bottom: 2px solid #1a1a1a;
             text-align: left;
         }
 
         td { 
             font-size: 10px; 
-            padding: 14px 10px; 
-            border-bottom: 1px solid #f0f0f0; 
+            padding: 10px 8px; 
+            border-bottom: 1px solid #eee; 
             color: #333;
         }
 
-        /* Tipografía de Cifras */
-        .product-name { font-weight: bold; color: #000; text-transform: uppercase; }
-        .col-number { text-align: center; font-weight: 700; }
-        .col-price { text-align: right; font-weight: 500; color: #666; }
-        .col-total { text-align: right; font-weight: 900; color: #000; font-size: 11px; }
-
-        /* Fila de Sumatoria Final */
-        .total-row td { 
-            padding: 20px 10px; 
-            border-bottom: none; 
-            font-size: 12px;
+        /* COLUMNAS */
+        .product-name { 
+            font-weight: bold; 
+            text-transform: uppercase; 
         }
-        .total-label { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-align: right; }
-        .total-amount { 
-            background-color: #000; 
-            color: #fff; 
+
+        .col-number { 
+            text-align: center; 
             font-weight: 900; 
-            text-align: right;
-            padding-right: 10px !important;
         }
 
+        .col-price { 
+            text-align: right; 
+            color: #666; 
+        }
+
+        .col-total { 
+            text-align: right; 
+            font-weight: 900; 
+        }
+
+        /* TOTAL ELEGANTE */
+        .total-row td {
+            border-top: 2px solid #000;
+            border-bottom: none;
+            padding-top: 12px;
+        }
+
+        .total-label {
+            text-align: right;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .total-value {
+            text-align: right;
+            font-size: 13px;
+            font-weight: 900;
+            color: #000;
+        }
+
+        /* FOOTER */
         .footer { 
-            position: fixed; bottom: 0; width: 100%; 
-            text-align: center; font-size: 8px; color: #aaa; 
-            border-top: 1px solid #eee; padding: 10px 0;
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            text-align: center; 
+            font-size: 8px; 
+            color: #999; 
+            border-top: 1px solid #eee; 
+            padding-top: 10px;
             text-transform: uppercase;
         }
     </style>
@@ -78,24 +131,36 @@
 
 <body>
 
-    <div class="header">
-        <span class="meta">
-            Fecha de Corte: {{ now()->format('d/m/Y') }}<br>
-            Moneda: Expresado en USD
-        </span>
-        <div class="brand">PRETEN<span class="accent">FORT</span></div>
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="logo-text">PRETEN<span class="accent">FORT</span></div>
+                <div style="font-size: 8px; color: #666;">
+                    REPORTE FINANCIERO DE INVENTARIO
+                </div>
+            </td>
+            <td class="header-detail">
+                FECHA DE CORTE: {{ now()->format('d/m/Y') }}<br>
+                MONEDA: USD
+            </td>
+        </tr>
+    </table>
+
+    <!-- SECCIÓN -->
+    <div class="section">
+        <h2>Reporte de Valorización de Activos</h2>
+        <p>Estado financiero de existencias en almacén</p>
     </div>
 
-    <h2>Reporte de Valorización de Activos</h2>
-    <div class="subtitle">Estado Financiero de Existencias en Almacén</div>
-
+    <!-- TABLA -->
     <table>
         <thead>
             <tr>
-                <th width="40%">Descripción del Producto</th>
+                <th width="40%">Producto</th>
                 <th width="15%" style="text-align: center;">Stock</th>
                 <th width="20%" style="text-align: right;">Precio Unit.</th>
-                <th width="25%" style="text-align: right;">Subtotal Valor</th>
+                <th width="25%" style="text-align: right;">Valor Total</th>
             </tr>
         </thead>
         <tbody>
@@ -107,16 +172,24 @@
                 <td class="col-total">{{ number_format($p->total, 2) }}</td>
             </tr>
             @endforeach
-
-            <tr class="total-row">
-                <td colspan="3" class="total-label">Inversión Total Consolidada</td>
-                <td class="total-amount">{{ number_format($totalGeneral, 2) }}</td>
-            </tr>
         </tbody>
+
+        <!-- TOTAL -->
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="3" class="total-label">
+                    Inversión total consolidada:
+                </td>
+                <td class="total-value">
+                    {{ number_format($totalGeneral, 2) }}
+                </td>
+            </tr>
+        </tfoot>
     </table>
 
+    <!-- FOOTER -->
     <div class="footer">
-        Documento con validez contable interna - PRETENFORT - Confidencial
+        Documento contable interno - Sistema PRETENFORT
     </div>
 
 </body>

@@ -9,7 +9,7 @@
     <div class="flex items-center gap-3">
         <span class="w-2 h-8 bg-[#F43F5E] rounded-full animate-pulse"></span>
         <div>
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight uppercase">Centro de Alertas</h2>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight uppercase">Centro de Alertas</h2>
             <p class="text-sm text-slate-500 font-medium italic">Monitoreo crítico de existencias y niveles de seguridad.</p>
         </div>
     </div>
