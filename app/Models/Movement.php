@@ -38,5 +38,9 @@ class Movement extends Model
     {
         return $this->belongsTo(MovementReason::class);
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
 

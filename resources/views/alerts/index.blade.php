@@ -46,6 +46,74 @@
             </div>
         </div>
     </div>
+    {{-- ========================= --}}
+{{-- ALERTAS DE COBRANZA --}}
+{{-- ========================= --}}
+@if($pendingOrders->count())
+
+<div class="bg-white p-6 rounded-2xl border border-red-100 shadow-sm">
+
+    <div class="flex items-center gap-3 mb-4">
+        <span class="w-2 h-6 bg-red-500 rounded-full animate-pulse"></span>
+        <h3 class="text-xs font-black text-red-500 uppercase tracking-widest">
+            Pedidos Pendientes de Cobro ({{ $pendingOrders->count() }})
+        </h3>
+    </div>
+
+    <div class="space-y-3">
+
+        @foreach($pendingOrders as $order)
+
+        <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100 hover:shadow transition">
+
+            {{-- INFO --}}
+            <div>
+                <p class="text-sm font-black text-slate-900">
+                    Pedido #{{ $order->id }}
+                </p>
+
+                <p class="text-xs text-slate-500">
+                    Cliente: <b>{{ $order->customer->name }}</b>
+                </p>
+
+                <p class="text-xs text-slate-400">
+                    {{ $order->created_at->diffForHumans() }}
+                </p>
+            </div>
+
+            {{-- TOTAL --}}
+            <div class="text-right">
+                <p class="text-sm font-black text-red-600">
+                    Bs {{ number_format($order->total,2) }}
+                </p>
+
+                <div class="flex gap-2 mt-2 justify-end">
+
+                    <a href="{{ route('orders.show', $order) }}"
+                       class="text-[10px] px-3 py-1 bg-slate-900 text-white rounded-lg hover:bg-teal-custom transition">
+                        Ver
+                    </a>
+
+                    {{-- PAGAR --}}
+                    <form action="{{ route('orders.pay', $order) }}" method="POST">
+                        @csrf
+                        <button class="text-[10px] px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                            Cobrar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        @endforeach
+
+    </div>
+
+</div>
+
+@endif
 
     {{-- CUERPO PRINCIPAL --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

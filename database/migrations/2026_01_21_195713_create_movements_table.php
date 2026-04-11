@@ -16,6 +16,8 @@ return new class extends Migration
                   ->constrained()
                   ->cascadeOnDelete(); // si se elimina producto, sí se elimina movimiento
 
+           $table->unsignedBigInteger('order_id')->nullable();
+
             $table->foreignId('user_id')
                   ->nullable() // 👈 IMPORTANTE
                   ->constrained()

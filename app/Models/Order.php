@@ -39,5 +39,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+    public function movements()
+{
+    return $this->hasMany(Movement::class);
+}
     use HasFactory;
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Alert;
 use Carbon\Carbon;
+use App\Models\Order;
 
 class AlertController extends Controller
 {
@@ -34,14 +35,25 @@ class AlertController extends Controller
             ->latest('resolved_at')
             ->limit(5)
             ->get();
+            // ==========================
+        // PEDIDOS PENDIENTES (NUEVO)
+        // ==========================
+        $pendingOrders = Order::with('customer')
+            ->where('estado', 'pendiente')
+            ->latest()
+            ->get();
+
+        
 
         return view('alerts.index', compact(
             'criticalCount',
             'warningCount',
             'resolvedLast7Days',
             'activeAlerts',
-            'resolvedAlerts'
+            'resolvedAlerts',
+            'pendingOrders' // 🔥 NUEVO
         ));
+
     }
 }
 

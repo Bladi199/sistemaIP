@@ -205,6 +205,28 @@ Reportes
 </a>
 </li>
 
+
+
+
+{{-- PEDIDOS --}}
+<li>
+<a href="{{ route('orders.index') }}"
+class="flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200
+hover:bg-white/5 hover:text-white
+{{ request()->routeIs('orders.*') ? 'bg-teal-custom text-white' : '' }}">
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+stroke="currentColor" stroke-width="1.2"
+class="w-[18px] h-[18px] ml-0.5 shrink-0">
+
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 7v5l3 3"/>
+</svg>
+
+Pedidos
+</a>
+</li>
+
 </ul>
 
 </aside>

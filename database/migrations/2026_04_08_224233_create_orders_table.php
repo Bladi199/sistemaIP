@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             // Datos del pedido
-            $table->date('fecha_pedido');
-            $table->date('fecha_entrega')->nullable();
+            $table->dateTime('fecha_pedido');
+            $table->dateTime('fecha_entrega')->nullable();
 
-            $table->enum('estado', ['pendiente', 'preventa', 'entregado', 'cancelado'])
+            $table->enum('estado', ['pendiente', 'cancelado'])
                   ->default('pendiente');
 
             // Totales

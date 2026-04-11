@@ -11,6 +11,8 @@ use App\Http\Controllers\MovementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +42,18 @@ Route::middleware(['auth', 'role:admin,usuario,operador'])->group(function () {
 
     // Productos
     Route::resource('products', ProductController::class);
+
+    Route::post('/customers/ajax', [CustomerController::class, 'storeAjax'])
+    ->name('customers.store.ajax');
+    
+    // Pedidos
+    Route::resource('orders', OrderController::class);
+
+    Route::get('/orders/{order}/pdf', [OrderController::class, 'pdf'])
+    ->name('orders.pdf');
+
+    Route::post('/orders/{order}/pay', [OrderController::class, 'markAsPaid'])
+    ->name('orders.pay');
 
     // Movimientos
     Route::get('/movements', [MovementController::class, 'index'])
