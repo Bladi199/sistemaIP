@@ -48,6 +48,7 @@ class OrderController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'fecha' => 'nullable|date',
             'estado' => 'required|string',
+            'direccion' => 'nullable|string|max:255', // 🔥 NUEVO
             'products' => 'required|array|min:1',
 
             'products.*.product_id' => 'required|exists:products,id',
@@ -71,12 +72,13 @@ class OrderController extends Controller
                     ? \Carbon\Carbon::parse($request->fecha) 
                     : null,
                 'estado'        => $request->estado,
+                'direccion'     => $request->direccion, // 🔥 NUEVO
                 'descuento'     => $request->descuento ?? 0,
                 'total'         => $request->total ?? 0,
                 'observaciones' => $request->observaciones,
             ]);
 
-            // 🔥 Buscar motivo venta una sola vez (optimizado)
+            // 🔥 Motivo venta
             $reasonVenta = MovementReason::where('name', 'Venta')->first();
 
             // ======================
@@ -86,14 +88,12 @@ class OrderController extends Controller
 
                 $product = Product::findOrFail($item['product_id']);
 
-                // 🔥 VALIDACIÓN DE STOCK
+                // VALIDAR STOCK
                 if ($product->stock_actual < $item['cantidad']) {
                     throw new \Exception("Stock insuficiente para {$product->name}");
                 }
 
-                // ======================
                 // DETALLE
-                // ======================
                 OrderDetail::create([
                     'order_id'        => $order->id,
                     'product_id'      => $item['product_id'],
@@ -102,17 +102,13 @@ class OrderController extends Controller
                     'subtotal'        => $item['subtotal'],
                 ]);
 
-                // ======================
                 // DESCONTAR STOCK
-                // ======================
                 $product->decrement('stock_actual', $item['cantidad']);
 
-                // ======================
                 // 🔥 MOVIMIENTO AUTOMÁTICO
-                // ======================
                 Movement::create([
                     'product_id' => $product->id,
-                    'order_id' => $order->id, // 🔥 relación con pedido
+                    'order_id' => $order->id,
                     'user_id' => Auth::id(),
                     'movement_type_id' => MovementTypeEnum::SALIDA->value,
                     'movement_reason_id' => $reasonVenta?->id,
@@ -160,12 +156,12 @@ class OrderController extends Controller
 
                 $product = $detail->product;
 
-                // 🔥 DEVOLVER STOCK
+                // DEVOLVER STOCK
                 $product->increment('stock_actual', $detail->cantidad);
-
-                // 🔥 OPCIONAL: eliminar movimientos relacionados
-                Movement::where('order_id', $order->id)->delete();
             }
+
+            // 🔥 eliminar movimientos relacionados UNA SOLA VEZ
+            Movement::where('order_id', $order->id)->delete();
 
             $order->details()->delete();
             $order->delete();

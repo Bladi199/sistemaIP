@@ -27,6 +27,7 @@ return new class extends Migration
             $table->decimal('descuento', 10, 2)->default(0);
 
             $table->text('observaciones')->nullable();
+            $table->string('direccion')->nullable();
 
             $table->timestamps();
         });

@@ -6,7 +6,8 @@
             <div class="flex items-center space-x-6">
 
                 <span class="text-sm font-medium text-gray-600">
-                    {{ Auth::user()->name }}
+                    
+                    {{ Auth::user()->name ?? 'Invitado' }}
                 </span>
 
                 <a href="{{ route('profile.edit') }}"

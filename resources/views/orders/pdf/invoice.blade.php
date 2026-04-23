@@ -93,7 +93,7 @@
         <td class="no-border" style="width: 63%; padding-right: 10px; vertical-align: top;">
             <table>
                 <tr><td class="label" style="width: 35%;">EJECUTIVO DE VENTA</td><td>{{ $order->user->name }} </td></tr>
-                <tr><td class="label">RUTA / DIRECCIÓN</td><td>{{ $order->customer->direccion ?? '-' }}</td></tr>
+                <tr><td class="label">RUTA / DIRECCIÓN</td><td>{{ $order->direccion ?? '-' }}</td></tr>
                 <tr><td class="label">NOMBRE DEL CLIENTE</td><td>{{ $order->customer->name }}</td></tr>
                 <tr><td class="label">ZONA</td><td>{{ $order->customer->zona ?? '-' }}</td></tr>
                 <tr><td class="label">CELULAR</td><td>{{ $order->customer->telefono ?? '-' }}</td></tr>

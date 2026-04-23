@@ -12,22 +12,33 @@
 {{-- ===================== --}}
 {{-- DATOS DEL PEDIDO --}}
 {{-- ===================== --}}
-<div class="grid grid-cols-3 gap-4 mb-6">
-    {{--  --}}
+<div class="grid grid-cols-4 gap-4 mb-6">
+
+    {{-- FECHA --}}
     <div>
         <label class="text-xs text-slate-500">Fecha de entrega</label>
         <input type="datetime-local" name="fecha"
                class="w-full border rounded-xl p-2">
     </div>
 
+    {{-- ESTADO --}}
     <div>
         <label class="text-xs text-slate-500">Estado</label>
         <select name="estado" class="w-full border rounded-xl p-2">
             <option value="pendiente">Pendiente</option>
-            <option value="entregado">Cancelado</option>
+            <option value="cancelado">Cancelado</option>
         </select>
     </div>
 
+    {{-- DIRECCIÓN (🔥 NUEVO) --}}
+    <div>
+        <label class="text-xs text-slate-500">Dirección de entrega</label>
+        <input type="text" name="direccion"
+               placeholder="Ej: Av. Siempre Viva 123"
+               class="w-full border rounded-xl p-2">
+    </div>
+
+    {{-- OBSERVACIONES --}}
     <div>
         <label class="text-xs text-slate-500">Observaciones</label>
         <input type="text" name="observaciones"
@@ -54,7 +65,11 @@
     <select name="customer_id" id="customerSelect"
             class="w-full rounded-xl border-gray-200">
         @foreach($customers as $c)
-            <option value="{{ $c->id }}">{{ $c->name }}</option>
+            <option value="{{ $c->id }}">
+                {{ $c->name }}
+                @if($c->telefono) - {{ $c->telefono }} @endif
+                @if($c->nit) | NIT: {{ $c->nit }} @endif
+            </option>
         @endforeach
     </select>
 
@@ -73,7 +88,8 @@
         <input type="text" id="c_phone" placeholder="Teléfono"
                class="w-full border rounded-xl p-2">
 
-        <input type="text" id="c_address" placeholder="Dirección"
+        {{-- 🔽 ESTE YA NO ES CLAVE PARA EL SISTEMA --}}
+        <input type="text" id="c_address" placeholder="Dirección (opcional)"
                class="w-full border rounded-xl p-2">
 
         <button type="button"
@@ -95,7 +111,8 @@
         <select id="productSelect" class="flex-1 border rounded-xl p-2">
             @foreach($products as $p)
                 <option value="{{ $p->id }}"
-                        data-price="{{ $p->precio_unitario }}">
+                        data-price="{{ $p->precio_unitario }}"
+                        data-stock="{{ $p->stock_actual }}">
                     {{ $p->name }} (Bs {{ $p->precio_unitario }})
                 </option>
             @endforeach
@@ -163,12 +180,30 @@ function addProduct() {
     let id = select.value;
     let name = select.options[select.selectedIndex].text;
     let price = parseFloat(select.options[select.selectedIndex].dataset.price);
+    let stock = parseInt(select.options[select.selectedIndex].dataset.stock);
 
-    let item = {
-        id, name, price, qty: 1
-    };
+    let existing = cart.find(p => p.id == id);
 
-    cart.push(item);
+    if(existing){
+
+        if(existing.qty >= stock){
+            alert("Stock máximo alcanzado");
+            return;
+        }
+
+        existing.qty += 1;
+
+    } else {
+
+        cart.push({
+            id,
+            name,
+            price,
+            qty: 1,
+            stock: stock // 🔥 IMPORTANTE
+        });
+    }
+
     render();
 }
 
@@ -188,8 +223,8 @@ function render() {
             <td>${item.name}</td>
 
             <td>
-                <input type="number" value="${item.qty}" min="1"
-                onchange="updateQty(${i}, this.value)">
+                <input type="number" value="${item.qty}" min="1" max="${item.stock}"
+onchange="updateQty(${i}, this.value)">
             </td>
 
             <td>${item.price}</td>
@@ -213,8 +248,22 @@ function render() {
     calculateTotal(total);
 }
 
-function updateQty(i,val){
-    cart[i].qty = parseInt(val);
+function updateQty(i, val){
+
+    let qty = parseInt(val);
+    let stock = cart[i].stock;
+
+    if(qty > stock){
+        qty = stock;
+        alert("Cantidad ajustada al stock disponible");
+    }
+
+    if(qty < 1){
+        qty = 1;
+    }
+
+    cart[i].qty = qty;
+
     render();
 }
 
@@ -266,21 +315,28 @@ function saveCustomer() {
     .then(res => res.json())
     .then(data => {
 
-        if(data.success){
+    if(!data.success){
+        alert(data.message);
 
-            let select = document.getElementById('customerSelect');
+        // 🔥 Seleccionar el existente automáticamente
+        let select = document.getElementById('customerSelect');
+        select.value = data.customer.id;
 
-            let option = document.createElement('option');
-            option.value = data.customer.id;
-            option.text  = data.customer.name;
+        return;
+    }
 
-            select.appendChild(option);
-            select.value = data.customer.id;
+    let select = document.getElementById('customerSelect');
 
-            document.getElementById('customerForm').classList.add('hidden');
+    let option = document.createElement('option');
+    option.value = data.customer.id;
+    option.text  = data.customer.name;
 
-        }
-    });
+    select.appendChild(option);
+    select.value = data.customer.id;
+
+    document.getElementById('customerForm').classList.add('hidden');
+
+});
 }
 </script>
 

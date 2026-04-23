@@ -1,6 +1,9 @@
+
 @php
-    $role = auth()->user()->role->name;
+    // Si hay usuario, saca el rol. Si no hay (JMeter), pon 'Invitado'
+    $role = auth()->check() ? auth()->user()->role->name : 'Invitado';
 @endphp
+
 
 <aside class="w-64 min-h-screen bg-black text-gray-400 flex flex-col">
 <div class="px-6 py-5 border-b border-teal-custom/40">
